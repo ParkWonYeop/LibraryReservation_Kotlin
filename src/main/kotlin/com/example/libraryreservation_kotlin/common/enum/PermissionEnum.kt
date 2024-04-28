@@ -1,4 +1,8 @@
 package com.example.libraryreservation_kotlin.common.enum
 
-enum class PermissionEnum {
+import lombok.AllArgsConstructor
+
+enum class PermissionEnum(permission: String) {
+    USER("user"),
+    ADMIN("admin");
 }
