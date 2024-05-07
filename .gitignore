@@ -40,3 +40,4 @@ out/
 .kotlin
 application-db.yml
 application-auth.yml
+application_log/
