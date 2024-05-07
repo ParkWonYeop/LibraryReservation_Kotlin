@@ -1,11 +1,9 @@
 package com.example.libraryreservation_kotlin.common.repository
 
-import com.example.libraryreservation_kotlin.common.entity.Token
-import com.example.libraryreservation_kotlin.common.entity.User
+import com.example.libraryreservation_kotlin.common.entity.TokenEntity
+import com.example.libraryreservation_kotlin.common.entity.UserEntity
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.stereotype.Repository
 
-@Repository
-interface TokenRepository: JpaRepository<Token, Long> {
-    fun findTokenModelByUserModel(user: User): Token?
+interface TokenRepository: JpaRepository<TokenEntity, Long> {
+    fun findByUser(user: UserEntity): TokenEntity?
 }

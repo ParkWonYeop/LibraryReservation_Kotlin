@@ -1,13 +1,13 @@
-package com.example.libraryreservation_kotlin.common.jwt
+package com.example.libraryreservation_kotlin.common.filter
 
-import com.example.libraryreservation_kotlin.common.entity.Token
-import com.example.libraryreservation_kotlin.common.entity.User
+import com.example.libraryreservation_kotlin.common.entity.TokenEntity
+import com.example.libraryreservation_kotlin.common.entity.UserEntity
+import com.example.libraryreservation_kotlin.common.jwt.JwtUtil
 import com.example.libraryreservation_kotlin.common.repository.TokenRepository
 import com.example.libraryreservation_kotlin.common.repository.UserRepository
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import lombok.extern.slf4j.Slf4j
 import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 import org.springframework.beans.factory.annotation.Value
@@ -18,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.web.filter.OncePerRequestFilter
 
-@Slf4j
 class JwtFilter(private val userRepository: UserRepository, private val tokenRepository: TokenRepository): OncePerRequestFilter() {
     @Value("\${jwt.secret_key}")
     lateinit var secretKey: String
@@ -51,7 +50,7 @@ class JwtFilter(private val userRepository: UserRepository, private val tokenRep
                 return
             }
 
-            val user: User? = userRepository.findUserEntityByPhoneNumber(phoneNumber)
+            val user: UserEntity? = userRepository.findByPhoneNumber(phoneNumber)
 
             if(user == null) {
                 log.error("유저를 찾을 수 없습니다.")
@@ -59,7 +58,7 @@ class JwtFilter(private val userRepository: UserRepository, private val tokenRep
                 return
             }
 
-            val checkToken: Token? = tokenRepository.findTokenModelByUserModel(user)
+            val checkToken: TokenEntity? = tokenRepository.findByUser(user)
 
             if(checkToken != null && checkToken.accessToken != token) {
                 log.error("토큰이 유효하지 않습니다.")

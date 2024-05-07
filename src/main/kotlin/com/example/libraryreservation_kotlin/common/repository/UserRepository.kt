@@ -1,10 +1,8 @@
 package com.example.libraryreservation_kotlin.common.repository
 
-import com.example.libraryreservation_kotlin.common.entity.User
+import com.example.libraryreservation_kotlin.common.entity.UserEntity
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.stereotype.Repository
 
-@Repository
-interface UserRepository: JpaRepository<User, Long> {
-    fun findUserEntityByPhoneNumber(phoneNumber: String): User?
+interface UserRepository: JpaRepository<UserEntity, Long> {
+    fun findByPhoneNumber(phoneNumber: String): UserEntity?
 }

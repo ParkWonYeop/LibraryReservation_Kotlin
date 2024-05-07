@@ -1,6 +1,6 @@
 package com.example.libraryreservation_kotlin.common.jwt
 
-import com.example.libraryreservation_kotlin.common.entity.User
+import com.example.libraryreservation_kotlin.common.entity.UserEntity
 import com.example.libraryreservation_kotlin.common.enum.JwtErrorEnum
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.JwtException
@@ -13,13 +13,11 @@ import lombok.AllArgsConstructor
 import lombok.extern.slf4j.Slf4j
 import java.util.*
 
-@AllArgsConstructor
-@Slf4j
 class JwtUtil {
     private val accessExpiredMs: Long = (1000 * 60 * 30).toLong()
     private val refreshExpiredMs: Long = (1000 * 60 * 60 * 3).toLong()
 
-    fun generateToken(user: User, secretKey: String): String {
+    fun generateToken(user: UserEntity, secretKey: String): String {
         return createAccessToken(user.phoneNumber, secretKey)
     }
 
