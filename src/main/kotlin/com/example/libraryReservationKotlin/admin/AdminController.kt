@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/admin")
-class AdminController(val adminService: AdminService) {
+class AdminController(private val adminService: AdminService) {
     @GetMapping("/reservation")
     fun getReservationList(): List<ReservationEntity> = adminService.getReservationList()
 
