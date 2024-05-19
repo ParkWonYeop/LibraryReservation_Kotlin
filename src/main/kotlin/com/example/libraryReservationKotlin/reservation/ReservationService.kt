@@ -1,5 +1,7 @@
 package com.example.libraryReservationKotlin.reservation
 
+import com.example.libraryReservationKotlin.common.dto.ReservationDeleteDto
+import com.example.libraryReservationKotlin.common.dto.ReservationDto
 import com.example.libraryReservationKotlin.common.entity.ReservationEntity
 import com.example.libraryReservationKotlin.common.entity.RoomEntity
 import com.example.libraryReservationKotlin.common.entity.UserEntity
@@ -10,16 +12,14 @@ import com.example.libraryReservationKotlin.common.repository.ReservationReposit
 import com.example.libraryReservationKotlin.common.repository.RoomRepository
 import com.example.libraryReservationKotlin.common.repository.UserRepository
 import com.example.libraryReservationKotlin.common.utils.SecurityUtil
-import com.example.libraryReservationKotlin.reservation.dto.ReservationDeleteDto
-import com.example.libraryReservationKotlin.reservation.dto.ReservationDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ReservationService(
-    val reservationRepository: ReservationRepository,
-    val roomRepository: RoomRepository,
-    val userRepository: UserRepository,
+    private val reservationRepository: ReservationRepository,
+    private val roomRepository: RoomRepository,
+    private val userRepository: UserRepository,
 ) {
     val securityUtil = SecurityUtil()
 

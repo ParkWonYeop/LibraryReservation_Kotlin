@@ -12,3 +12,11 @@
 - mutable, immutable 스터디 *
 - optional과 nullable 차이 스터디 후 포스팅 *
 - UserEntity::class.java / UserEntity::class 차이 스터디
+
+#### 2024-05-13
+- 생성자안에 들어가는 bean들 private 붙일것. *
+- @Value 어노테이션도 생성자 안에서 선언할 것. *
+- RuntimeException 은 진짜 예기치 못한 에러가 발생할 경우를 대비해서 따로 처리할것. *
+- mac에서 ./gradlew 명령어 실행할 수 없는 현상 수정
+- N+1 쿼리 다시 스터디, lazy loading 추가 스터디 *
+

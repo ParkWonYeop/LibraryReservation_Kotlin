@@ -63,6 +63,7 @@ dependencies {
     testImplementation("org.projectlombok:lombok:1.18.32")
     testImplementation("junit:junit:4.13.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.1")
+    testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.1")
 
     // testRuntimeOnly
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.3.1")
@@ -72,5 +73,13 @@ tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs += "-Xjsr305=strict"
         jvmTarget = "17"
+    }
+}
+
+tasks.withType<Test> {
+    doFirst {
+        filter {
+            includeTestsMatching("com.example.libraryReservationKotlin.*")
+        }
     }
 }

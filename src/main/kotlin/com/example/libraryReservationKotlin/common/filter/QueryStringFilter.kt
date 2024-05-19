@@ -19,7 +19,7 @@ class QueryStringFilter : OncePerRequestFilter() {
             return values
         }
 
-        override fun getParameter(parameter: String): String {
+        override fun getParameter(parameter: String): String? {
             val value = super.getParameter(parameter) ?: return super.getParameter(toSnakeCase(parameter))
 
             return value

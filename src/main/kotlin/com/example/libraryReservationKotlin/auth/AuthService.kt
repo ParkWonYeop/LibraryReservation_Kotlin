@@ -21,20 +21,19 @@ import org.springframework.stereotype.Service
 
 @Service
 class AuthService(
-    val userRepository: UserRepository,
-    val encoder: BCryptPasswordEncoder,
-    val tokenRepository: TokenRepository,
+    private val userRepository: UserRepository,
+    private val encoder: BCryptPasswordEncoder,
+    private val tokenRepository: TokenRepository,
+    @Value("\${secret_key}")
+    private val secretKey: String,
 ) {
-    @Value("\${jwt.secret_key}")
-    private lateinit var secretKey: String
     private val jwtUtil = JwtUtil()
     private val log = LoggerFactory.getLogger(AuthService::class.java)
 
     @Transactional
     fun login(loginDto: LoginDto): LoginResponseDto {
-        val userEntity: UserEntity =
-            userRepository.findByPhoneNumber(loginDto.phoneNumber)
-                ?: throw AccessDeniedException("전화번호가 일치하지 않습니다.")
+        val userEntity: UserEntity = userRepository.findByPhoneNumber(loginDto.phoneNumber)
+            ?: throw AccessDeniedException("전화번호가 일치하지 않습니다.")
 
         if (!encoder.matches(loginDto.password, userEntity.password)) {
             throw AccessDeniedException("비밀번호가 일치하지 않습니다.")
@@ -79,6 +78,7 @@ class AuthService(
         }
 
         val phoneNumber: String = refreshDto.phoneNumber
+
         val userEntity: UserEntity = userRepository.findByPhoneNumber(phoneNumber)
             ?: throw AccessDeniedException("user not found")
 

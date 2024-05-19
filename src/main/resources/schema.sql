@@ -10,7 +10,7 @@ create table reservation
 (
     reservation_id bigint auto_increment,
     user_id        bigint       not null,
-    seat_id        bigint       not null,
+    room_id        bigint       not null,
     start_time     timestamp(6) not null,
     end_time       timestamp(6) not null,
     primary key (reservation_id)
@@ -39,7 +39,7 @@ create table users
     name         varchar(255) not null,
     password     varchar(255) not null,
     phone_number varchar(255) not null,
-    permission   tinyint      not null check (permission between 0 and 1),
+    permission   ENUM('USER','ADMIN'),
     create_at    timestamp(6),
     update_at    timestamp(6),
     primary key (user_id)
@@ -47,7 +47,7 @@ create table users
 
 alter table if exists reservation
     add constraint FK26j1jgrx8n5n1xbc04y22tm6d
-        foreign key (seat_id)
+        foreign key (room_id)
             references room;
 
 alter table if exists reservation

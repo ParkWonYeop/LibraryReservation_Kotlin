@@ -6,5 +6,5 @@ import jakarta.validation.constraints.NotNull
 
 data class RoomTypeDto(
     @field:NotNull(message = "값이 없습니다.", groups = [NotBlankGroup::class])
-    val roomEnum: RoomEnum,
+    val roomType: RoomEnum,
 )

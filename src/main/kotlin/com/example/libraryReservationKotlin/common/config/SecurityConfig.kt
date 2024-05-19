@@ -26,7 +26,7 @@ class SecurityConfig {
     @Autowired
     private lateinit var tokenRepository: TokenRepository
 
-    @Value("\${jwt.secret_key}")
+    @Value("\${secret_key}")
     private lateinit var secretKey: String
 
     @Bean

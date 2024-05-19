@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class RoomService(val roomRepository: RoomRepository) {
+class RoomService(private val roomRepository: RoomRepository) {
     @Transactional(readOnly = true)
     fun getRoomList(): List<RoomEntity> = roomRepository.findAll()
 

@@ -38,6 +38,8 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+### env ###
 application-db.yml
 application-auth.yml
 application_log/
