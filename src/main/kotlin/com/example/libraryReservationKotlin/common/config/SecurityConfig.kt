@@ -5,7 +5,6 @@ import com.example.libraryReservationKotlin.common.filter.JwtFilter
 import com.example.libraryReservationKotlin.common.filter.QueryStringFilter
 import com.example.libraryReservationKotlin.common.repository.TokenRepository
 import com.example.libraryReservationKotlin.common.repository.UserRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -19,16 +18,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
-    @Autowired
-    private lateinit var userRepository: UserRepository
-
-    @Autowired
-    private lateinit var tokenRepository: TokenRepository
-
+class SecurityConfig(
+    private val userRepository: UserRepository,
+    private val tokenRepository: TokenRepository,
     @Value("\${secret_key}")
-    private lateinit var secretKey: String
-
+    private val secretKey: String,
+) {
     @Bean
     protected fun securityFilterChain(http: HttpSecurity): DefaultSecurityFilterChain? {
         return http
