@@ -1,7 +1,5 @@
 package com.example.libraryReservationKotlin
 
-import com.example.libraryReservationKotlin.auth.AuthController
-import com.example.libraryReservationKotlin.auth.dto.LoginResponseDto
 import com.example.libraryReservationKotlin.fixture.AuthFixtures
 import com.example.libraryReservationKotlin.fixture.ReservationFixtures
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -20,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -31,9 +30,6 @@ import java.time.LocalDateTime
 @SpringBootTest
 class ReservationControllerTest {
     @Autowired
-    private lateinit var authController: AuthController
-
-    @Autowired
     private lateinit var mockMvc: MockMvc
 
     @Autowired
@@ -44,11 +40,8 @@ class ReservationControllerTest {
 
     @Before
     fun setUp() {
-        val tokenEntity: LoginResponseDto = authController.login(authFixtures.loginAddressOne())
-        session.setAttribute("accessToken", tokenEntity.accessToken)
-
-        val tokenEntity2: LoginResponseDto = authController.login(authFixtures.loginAddressTwo())
-        session.setAttribute("accessToken2", tokenEntity2.accessToken)
+        session.setAttribute("accessToken", authFixtures.accessTokenOne())
+        session.setAttribute("accessToken2", authFixtures.accessTokenTwo())
     }
 
     @After
@@ -96,7 +89,7 @@ class ReservationControllerTest {
             .andExpectAll(
                 MockMvcResultMatchers.status().isBadRequest(),
                 MockMvcResultMatchers.jsonPath("$").value("타입이 잘못되었습니다."),
-            )
+            ).andDo(MockMvcResultHandlers.print())
     }
 
     @DisplayName("예약 테스트 - seatNumber/특수문자")
@@ -127,7 +120,7 @@ class ReservationControllerTest {
         )
             .andExpectAll(
                 MockMvcResultMatchers.status().isBadRequest(),
-                MockMvcResultMatchers.jsonPath("$").value("잘못된 좌석 번호 입니다."),
+                MockMvcResultMatchers.jsonPath("$").value("값이 null 입니다."),
             )
     }
 
@@ -202,7 +195,7 @@ class ReservationControllerTest {
         )
             .andExpectAll(
                 MockMvcResultMatchers.status().isBadRequest(),
-                MockMvcResultMatchers.jsonPath("$").value("타입이 잘못되었습니다."),
+                MockMvcResultMatchers.jsonPath("$").value("값이 null 입니다."),
             )
     }
 

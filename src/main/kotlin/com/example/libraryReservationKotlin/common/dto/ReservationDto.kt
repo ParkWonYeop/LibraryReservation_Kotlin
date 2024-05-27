@@ -2,19 +2,20 @@ package com.example.libraryReservationKotlin.common.dto
 
 import com.example.libraryReservationKotlin.common.enum.RoomEnum
 import com.example.libraryReservationKotlin.common.validation.ValidationGroups.FutureGroup
-import com.example.libraryReservationKotlin.common.validation.ValidationGroups.NotBlankGroup
+import com.example.libraryReservationKotlin.common.validation.ValidationGroups.NotNullGroup
 import jakarta.validation.constraints.Future
 import jakarta.validation.constraints.NotNull
 import java.time.LocalDateTime
 
 data class ReservationDto(
-    @field:NotNull(message = "빈 문자열 입니다.", groups = [NotBlankGroup::class])
-    var roomType: RoomEnum = RoomEnum.DIGITAL,
-    @field:NotNull(message = "빈 문자열 입니다.", groups = [NotBlankGroup::class])
-    val seatNumber: Int = 0,
-    @field:NotNull(message = "빈 문자열 입니다.", groups = [NotBlankGroup::class])
+    @field:NotNull(message = "값이 null 입니다.", groups = [NotNullGroup::class])
+    val roomType: RoomEnum? = null,
+    @field:NotNull(message = "값이 null 입니다.", groups = [NotNullGroup::class])
+    val seatNumber: Int? = null,
+    @field:NotNull(message = "값이 null 입니다.", groups = [NotNullGroup::class])
     @field:Future(message = "현재보다 과거입니다.", groups = [FutureGroup::class])
-    val startTime: LocalDateTime = LocalDateTime.now(),
-    @field:NotNull(message = "빈 문자열 입니다.", groups = [NotBlankGroup::class])
-    val endTime: LocalDateTime = LocalDateTime.now(),
+    val startTime: LocalDateTime? = null,
+    @field:NotNull(message = "값이 null 입니다.", groups = [NotNullGroup::class])
+    @field:Future(message = "현재보다 과거입니다.", groups = [FutureGroup::class])
+    val endTime: LocalDateTime? = null,
 )

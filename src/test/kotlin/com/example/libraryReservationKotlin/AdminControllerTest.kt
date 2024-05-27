@@ -1,7 +1,5 @@
 package com.example.libraryReservationKotlin
 
-import com.example.libraryReservationKotlin.auth.AuthController
-import com.example.libraryReservationKotlin.auth.dto.LoginResponseDto
 import com.example.libraryReservationKotlin.fixture.AuthFixtures
 import org.junit.After
 import org.junit.Before
@@ -29,19 +27,12 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 class AdminControllerTest {
     @Autowired
-    private lateinit var authController: AuthController
-
-    @Autowired
     private lateinit var mockMvc: MockMvc
     private val session: MockHttpSession = MockHttpSession()
     private val authFixtures: AuthFixtures = AuthFixtures()
 
     @Before
-    fun setUp() {
-        val tokenEntity: LoginResponseDto = authController.login(authFixtures.loginAddressOne())
-
-        session.setAttribute("accessToken", tokenEntity.accessToken)
-    }
+    fun setUp() = session.setAttribute("accessToken", authFixtures.accessTokenOne())
 
     @After
     fun clean() = session.clearAttributes()
@@ -51,6 +42,7 @@ class AdminControllerTest {
     fun reservationTest() {
         mockMvc.perform(
             get("/admin/reservation")
+                .param("page", "0")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
         )
             .andExpectAll(
@@ -75,6 +67,20 @@ class AdminControllerTest {
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
         )
             .andExpectAll(status().isOk())
+    }
+
+    @DisplayName("예약 삭제 - null")
+    @Test
+    @Throws(Exception::class)
+    fun deleteNullTest() {
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/admin/reservation")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
+        )
+            .andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$").value("값이 null 입니다."),
+            )
     }
 
     @DisplayName("예약 삭제 - 없는 인덱스")
@@ -103,7 +109,7 @@ class AdminControllerTest {
         )
             .andExpectAll(
                 status().isBadRequest(),
-                jsonPath("$").value("타입이 잘못되었습니다."),
+                jsonPath("$").value("값이 null 입니다."),
             )
     }
 

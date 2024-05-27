@@ -1,11 +1,8 @@
 package com.example.libraryReservationKotlin
 
-import com.example.libraryReservationKotlin.auth.AuthController
-import com.example.libraryReservationKotlin.auth.dto.LoginResponseDto
+import com.example.libraryReservationKotlin.auth.dto.RefreshDto
 import com.example.libraryReservationKotlin.fixture.AuthFixtures
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.DisplayName
 import org.junit.runner.RunWith
@@ -13,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.mock.web.MockHttpSession
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
@@ -28,24 +24,11 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 class AuthControllerTest {
     @Autowired
-    private lateinit var authController: AuthController
-
-    @Autowired
     private lateinit var mockMvc: MockMvc
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
-    private var session: MockHttpSession = MockHttpSession()
     private val authFixtures: AuthFixtures = AuthFixtures()
-
-    @Before
-    fun setUp() {
-        val tokenEntity: LoginResponseDto = authController.login(authFixtures.loginAddressOne())
-        session.setAttribute("refreshToken", tokenEntity.refreshToken)
-    }
-
-    @After
-    fun clean() = session.clearAttributes()
 
     @DisplayName("로그인 - 성공")
     @Test
@@ -53,7 +36,7 @@ class AuthControllerTest {
     fun loginTest() {
         mockMvc.perform(
             MockMvcRequestBuilders.post("/auth/login")
-                .content(objectMapper.writeValueAsString(authFixtures.loginAddressOne()))
+                .content(objectMapper.writeValueAsString(authFixtures.loginAddressTwo()))
                 .contentType(MediaType.APPLICATION_JSON),
         )
             .andExpectAll(
@@ -428,7 +411,7 @@ class AuthControllerTest {
     fun tokenTest() {
         mockMvc.perform(
             MockMvcRequestBuilders.put("/auth/token")
-                .content(objectMapper.writeValueAsString(authFixtures.refreshToken(session.getAttribute("refreshToken").toString())))
+                .content(objectMapper.writeValueAsString(RefreshDto("01099716733", authFixtures.refreshTokenOne())))
                 .contentType(MediaType.APPLICATION_JSON),
         )
             .andExpectAll(
@@ -444,7 +427,7 @@ class AuthControllerTest {
     fun tokenWrongTokenTest() {
         mockMvc.perform(
             MockMvcRequestBuilders.put("/auth/token")
-                .content(objectMapper.writeValueAsString(authFixtures.refreshToken("1234a")))
+                .content(objectMapper.writeValueAsString(authFixtures.refreshTokenAddress("1234a")))
                 .contentType(MediaType.APPLICATION_JSON),
         )
             .andExpectAll(

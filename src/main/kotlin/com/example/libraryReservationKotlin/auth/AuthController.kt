@@ -1,9 +1,7 @@
 package com.example.libraryReservationKotlin.auth
 
 import com.example.libraryReservationKotlin.auth.dto.LoginDto
-import com.example.libraryReservationKotlin.auth.dto.LoginResponseDto
 import com.example.libraryReservationKotlin.auth.dto.RefreshDto
-import com.example.libraryReservationKotlin.auth.dto.RefreshResponseDto
 import com.example.libraryReservationKotlin.auth.dto.SignupDto
 import com.example.libraryReservationKotlin.common.validation.ValidationSequence
 import org.springframework.http.HttpStatus
@@ -21,7 +19,7 @@ class AuthController(private val authService: AuthService) {
     @PostMapping("/login")
     fun login(
         @Validated(ValidationSequence::class) @RequestBody loginDto: LoginDto,
-    ): LoginResponseDto = authService.login(loginDto)
+    ) = authService.login(loginDto)
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
@@ -32,5 +30,5 @@ class AuthController(private val authService: AuthService) {
     @PutMapping("/token")
     fun refreshToken(
         @Validated(ValidationSequence::class) @RequestBody refreshDto: RefreshDto,
-    ): RefreshResponseDto = authService.refreshToken(refreshDto)
+    ) = authService.refreshToken(refreshDto)
 }

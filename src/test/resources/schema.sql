@@ -39,7 +39,7 @@ create table users
     name         varchar(255) not null,
     password     varchar(255) not null,
     phone_number varchar(255) not null,
-    permission   ENUM('USER','ADMIN'),
+    permission   ENUM ('USER','ADMIN'),
     create_at    timestamp(6),
     update_at    timestamp(6),
     primary key (user_id)

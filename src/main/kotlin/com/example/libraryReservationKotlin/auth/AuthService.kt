@@ -32,19 +32,18 @@ class AuthService(
 
     @Transactional
     fun login(loginDto: LoginDto): LoginResponseDto {
-        val userEntity: UserEntity = userRepository.findByPhoneNumber(loginDto.phoneNumber)
+        val userEntity = userRepository.findByPhoneNumber(loginDto.phoneNumber)
             ?: throw AccessDeniedException("전화번호가 일치하지 않습니다.")
 
         if (!encoder.matches(loginDto.password, userEntity.password)) {
             throw AccessDeniedException("비밀번호가 일치하지 않습니다.")
         }
 
-        val accessToken: String = jwtUtil.generateToken(userEntity, secretKey)
-        val refreshToken: String = jwtUtil.createRefreshToken(secretKey)
+        val accessToken = jwtUtil.generateToken(userEntity, secretKey)
+        val refreshToken = jwtUtil.createRefreshToken(secretKey)
 
-        val tokenEntity: TokenEntity =
-            tokenRepository.findByUser(userEntity)
-                ?: TokenEntity(null, userEntity, accessToken, refreshToken)
+        val tokenEntity = tokenRepository.findByUser(userEntity)
+            ?: TokenEntity(null, userEntity, accessToken, refreshToken)
 
         tokenEntity.user = userEntity
         tokenEntity.refreshToken = refreshToken
@@ -59,7 +58,7 @@ class AuthService(
 
     @Transactional
     fun signup(signupDto: SignupDto) {
-        val phoneNumber: String = signupDto.phoneNumber
+        val phoneNumber = signupDto.phoneNumber
         if (userRepository.findByPhoneNumber(phoneNumber) != null) {
             throw CustomException(CommunalResponse.ALREADY_SIGNUP_PHONENUMBER)
         }
@@ -77,20 +76,20 @@ class AuthService(
             throw AccessDeniedException("refreshToken is expired")
         }
 
-        val phoneNumber: String = refreshDto.phoneNumber
+        val phoneNumber = refreshDto.phoneNumber
 
-        val userEntity: UserEntity = userRepository.findByPhoneNumber(phoneNumber)
+        val userEntity = userRepository.findByPhoneNumber(phoneNumber)
             ?: throw AccessDeniedException("user not found")
 
-        val tokenEntity: TokenEntity = tokenRepository.findByUser(userEntity)
+        val tokenEntity = tokenRepository.findByUser(userEntity)
             ?: throw AccessDeniedException("token not found")
 
         if (tokenEntity.refreshToken != refreshDto.refreshToken) {
             throw AccessDeniedException("refreshToken is not correct")
         }
 
-        val accessToken: String = jwtUtil.generateToken(userEntity, secretKey)
-        val refreshToken: String = jwtUtil.createRefreshToken(secretKey)
+        val accessToken = jwtUtil.generateToken(userEntity, secretKey)
+        val refreshToken = jwtUtil.createRefreshToken(secretKey)
 
         tokenEntity.accessToken = accessToken
         tokenEntity.refreshToken = refreshToken

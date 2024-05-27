@@ -12,6 +12,11 @@ enum class CommunalResponse constructor(var httpStatus: HttpStatus, var message:
     ALREADY_RESERVATION_SEAT(HttpStatus.BAD_REQUEST, "이미 예약된 좌석입니다."),
     RESERVATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "예약을 찾을 수 없습니다."),
     USER_NOT_CORRECT(HttpStatus.BAD_REQUEST, "유저가 일치 하지 않습니다."),
+    ID_IS_NULL(HttpStatus.BAD_REQUEST, "ID가 없습니다."),
+    START_TIME_IS_NULL(HttpStatus.BAD_REQUEST, "startTime이 없습니다."),
+    END_TIME_IS_NULL(HttpStatus.BAD_REQUEST, "endTime이 없습니다."),
+    ROOM_ENUM_IS_NULL(HttpStatus.BAD_REQUEST, "roomEnum이 없습니다."),
+    SEAT_NUMBER_IS_NULL(HttpStatus.BAD_REQUEST, "seatNumber이 없습니다."),
 
     // AuthResponse
     ALREADY_SIGNUP_PHONENUMBER(HttpStatus.BAD_REQUEST, "이미 가입한 전화번호입니다."),

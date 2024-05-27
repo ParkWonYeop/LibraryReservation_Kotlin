@@ -5,6 +5,6 @@ import com.example.libraryReservationKotlin.common.validation.ValidationGroups.N
 import jakarta.validation.constraints.NotNull
 
 data class RoomTypeDto(
-    @field:NotNull(message = "값이 없습니다.", groups = [NotBlankGroup::class])
+    @field:NotNull(message = "값이 null 입니다.", groups = [NotBlankGroup::class])
     val roomType: RoomEnum,
 )

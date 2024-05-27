@@ -1,7 +1,5 @@
 package com.example.libraryReservationKotlin.common.filter
 
-import com.example.libraryReservationKotlin.common.entity.TokenEntity
-import com.example.libraryReservationKotlin.common.entity.UserEntity
 import com.example.libraryReservationKotlin.common.jwt.JwtUtil
 import com.example.libraryReservationKotlin.common.repository.TokenRepository
 import com.example.libraryReservationKotlin.common.repository.UserRepository
@@ -31,7 +29,7 @@ class JwtFilter(private val userRepository: UserRepository, private val tokenRep
                 return
             }
 
-            val token: String = authorization.split(" ")[1]
+            val token = authorization.split(" ")[1]
 
             if (jwtUtil.isExpired(token, secretKey)) {
                 log.error("Token이 만료되었습니다.")
@@ -39,7 +37,7 @@ class JwtFilter(private val userRepository: UserRepository, private val tokenRep
                 return
             }
 
-            val phoneNumber: String = jwtUtil.getSubject(token, secretKey)
+            val phoneNumber = jwtUtil.getSubject(token, secretKey)
 
             if (phoneNumber == "") {
                 log.error("토큰에 Subject가 없습니다.")
@@ -47,15 +45,14 @@ class JwtFilter(private val userRepository: UserRepository, private val tokenRep
                 return
             }
 
-            val user: UserEntity? = userRepository.findByPhoneNumber(phoneNumber)
+            val user = userRepository.findByPhoneNumber(phoneNumber)
+                ?: run {
+                    log.error("유저를 찾을 수 없습니다.")
+                    filterChain.doFilter(request, response)
+                    return
+                }
 
-            if (user == null) {
-                log.error("유저를 찾을 수 없습니다.")
-                filterChain.doFilter(request, response)
-                return
-            }
-
-            val checkToken: TokenEntity? = tokenRepository.findByUser(user)
+            val checkToken = tokenRepository.findByUser(user)
 
             if (checkToken != null && checkToken.accessToken != token) {
                 log.error("토큰이 유효하지 않습니다.")

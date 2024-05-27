@@ -20,3 +20,12 @@
 - mac에서 ./gradlew 명령어 실행할 수 없는 현상 수정
 - N+1 쿼리 다시 스터디, lazy loading 추가 스터디 *
 
+
+#### 2024-05-22
+- 페이징 처리 스터디, 적용 및 포스팅 *
+- Long, Int 같은 Primitve 타입은 디폴트값이 존재. 따라서, NotNull 어노테이션을 붙여도 기본값이 들어가서 validation을 건너뛰는 이슈가 있는데 이걸 수정해보기.
+- 구조 분해 선언과 component 함수 스터디, 포스팅 *
+- Kotlin ENUM에 ';'을 찍는 이유 스터디, 포스팅b *
+- JWTFilter 50-54 line 리팩토링. return 도 하게끔. *
+- database reader/writer 분리 스터디, 적용 및 포스팅 *
+- ~Test에서 AuthController 의존성을 가져오지 말고, session 세팅을 fixture등으로 해결할 것. *

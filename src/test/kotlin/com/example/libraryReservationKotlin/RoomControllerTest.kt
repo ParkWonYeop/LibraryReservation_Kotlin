@@ -1,7 +1,5 @@
 package com.example.libraryReservationKotlin
 
-import com.example.libraryReservationKotlin.auth.AuthController
-import com.example.libraryReservationKotlin.auth.dto.LoginResponseDto
 import com.example.libraryReservationKotlin.fixture.AuthFixtures
 import org.junit.After
 import org.junit.Before
@@ -27,17 +25,13 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 class RoomControllerTest {
     @Autowired
-    private lateinit var authController: AuthController
-
-    @Autowired
     private lateinit var mockMvc: MockMvc
     private var session: MockHttpSession = MockHttpSession()
     private val authFixtures: AuthFixtures = AuthFixtures()
 
     @Before
     fun setUp() {
-        val tokenEntity: LoginResponseDto = authController.login(authFixtures.loginAddressOne())
-        session.setAttribute("accessToken", tokenEntity.accessToken)
+        session.setAttribute("accessToken", authFixtures.accessTokenOne())
     }
 
     @After
@@ -59,9 +53,9 @@ class RoomControllerTest {
                 MockMvcResultMatchers.jsonPath("$.[0].roomId").value(1),
                 MockMvcResultMatchers.jsonPath("$.[0].roomType").value("DIGITAL"),
                 MockMvcResultMatchers.jsonPath("$.[0].seatNumber").value(1),
-                MockMvcResultMatchers.jsonPath("$.[18].roomId").value(19),
-                MockMvcResultMatchers.jsonPath("$.[18].roomType").value("STUDYING"),
-                MockMvcResultMatchers.jsonPath("$.[18].seatNumber").value(8),
+                MockMvcResultMatchers.jsonPath("$.[9].roomId").value(10),
+                MockMvcResultMatchers.jsonPath("$.[9].roomType").value("READING"),
+                MockMvcResultMatchers.jsonPath("$.[9].seatNumber").value(4),
             )
     }
 
