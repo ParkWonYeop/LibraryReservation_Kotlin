@@ -6,6 +6,7 @@ import com.example.libraryReservationKotlin.common.entity.ReservationEntity
 import com.example.libraryReservationKotlin.common.entity.RoomEntity
 import com.example.libraryReservationKotlin.common.errorHandle.CustomException
 import com.example.libraryReservationKotlin.common.errorHandle.constant.CommunalResponse
+import com.example.libraryReservationKotlin.common.pageable.CustomPageRequest
 import com.example.libraryReservationKotlin.common.repository.ReservationRepository
 import com.example.libraryReservationKotlin.common.repository.RoomRepository
 import com.example.libraryReservationKotlin.common.repository.UserRepository
@@ -23,14 +24,10 @@ class ReservationService(
 
     @Transactional
     fun reservationSeat(reservationDto: ReservationDto) {
-        val startTime = reservationDto.startTime
-            ?: throw CustomException(CommunalResponse.START_TIME_IS_NULL)
-        val endTime = reservationDto.endTime
-            ?: throw CustomException(CommunalResponse.END_TIME_IS_NULL)
-        val roomEnum = reservationDto.roomType
-            ?: throw CustomException(CommunalResponse.ROOM_ENUM_IS_NULL)
-        val seatNumber = reservationDto.seatNumber
-            ?: throw CustomException(CommunalResponse.SEAT_NUMBER_IS_NULL)
+        val startTime = reservationDto.getNotNullStartTime()
+        val endTime = reservationDto.getNotNullEndTime()
+        val roomEnum = reservationDto.getNotNullRoomType()
+        val seatNumber = reservationDto.getNotNullSeatNumber()
 
         val roomEntityList = roomRepository.findByRoomType(roomEnum)
 
@@ -58,18 +55,17 @@ class ReservationService(
     }
 
     @Transactional(readOnly = true)
-    fun getReservationList(): List<ReservationEntity> {
+    fun getReservationList(pageRequest: CustomPageRequest): List<ReservationEntity> {
         val userEntity = userRepository.findByPhoneNumber(securityUtil.getCurrentMemberId())
             ?: throw CustomException(CommunalResponse.USER_NOT_FOUND)
-        return reservationRepository.findByUser(userEntity)
+        return reservationRepository.findByUser(pageRequest, userEntity)
     }
 
     @Transactional
     fun deleteReservation(reservationDeleteDto: ReservationDeleteDto) {
-        val id = reservationDeleteDto.id
-            ?: throw CustomException(CommunalResponse.ID_IS_NULL)
+        val id = reservationDeleteDto.getNotNullId()
 
-        val reservationEntity = reservationRepository.findByReservationId(id)
+        val reservationEntity = reservationRepository.findReservationById(id)
             ?: throw CustomException(CommunalResponse.RESERVATION_NOT_FOUND)
 
         val userEntity = userRepository.findByPhoneNumber(securityUtil.getCurrentMemberId())

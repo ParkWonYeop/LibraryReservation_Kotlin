@@ -29,3 +29,16 @@
 - JWTFilter 50-54 line 리팩토링. return 도 하게끔. *
 - database reader/writer 분리 스터디, 적용 및 포스팅 *
 - ~Test에서 AuthController 의존성을 가져오지 말고, session 세팅을 fixture등으로 해결할 것. *
+
+
+#### 2024-05-27
+- PageRequest 를 사용해서 페이징 요청을 받도록 개선하고 CustomPageRequest를 직접 만들어서 적용해볼것. *
+    - CustomPageRequest란?
+        - sort를 id, name, email 등등으로 지정할 수 있을텐데 클라이언트에서 별도로 지정하지 않아도 default 값으로 세팅되도록.
+        - pageNumber, size 모두 위와 같이 작업.
+- Primitive 타입은 defualut value가 적용되서 nullable 처리하면 service layer logic 지저분해진다. 이를 해결할 수 있는 방법을 찾아볼것. *
+- componentN 몇까지 생성되는지 알아보기 *
+- apply, let, run, also, with 차이 스터디 후 포스팅 *
+- drop table, truncate 차이를 성능에 근거하여 포스팅 *
+- 매 테스트 코드가 돌 때 마다 sql 돌 때 auto_increment 초기화하는 방법 강구해보기. *
+- 코드 통일성 지킬것. 꼼꼼함을 기를것.

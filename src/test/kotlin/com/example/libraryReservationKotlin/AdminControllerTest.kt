@@ -14,7 +14,7 @@ import org.springframework.mock.web.MockHttpSession
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -44,43 +44,56 @@ class AdminControllerTest {
             get("/admin/reservation")
                 .param("page", "0")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
+        ).andExpectAll(
+            status().isOk(),
+            jsonPath("$").isArray(),
+            jsonPath("$[0].id").value(1),
+            jsonPath("$[0].room.id").value(1),
+            jsonPath("$[0].room.roomType").value("DIGITAL"),
+            jsonPath("$[0].room.seatNumber").value(1),
+            jsonPath("$[0].startTime").value("2024-06-04T00:00:00"),
+            jsonPath("$[0].endTime").value("2024-06-04T01:00:00"),
         )
-            .andExpectAll(
-                status().isOk(),
-                jsonPath("$").isArray(),
-                jsonPath("$[0].reservationId").value(1),
-                jsonPath("$[0].room.roomId").value(1),
-                jsonPath("$[0].room.roomType").value("DIGITAL"),
-                jsonPath("$[0].room.seatNumber").value(1),
-                jsonPath("$[0].startTime").value("2024-06-04T00:00:00"),
-                jsonPath("$[0].endTime").value("2024-06-04T01:00:00"),
-            )
+    }
+
+    @DisplayName("예약리스트 - 페이지 기본값")
+    @Test
+    fun reservationPageTest() {
+        mockMvc.perform(
+            get("/admin/reservation")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
+        ).andExpectAll(
+            status().isOk(),
+            jsonPath("$").isArray(),
+            jsonPath("$[0].id").value(1),
+            jsonPath("$[0].room.id").value(1),
+            jsonPath("$[0].room.roomType").value("DIGITAL"),
+            jsonPath("$[0].room.seatNumber").value(1),
+            jsonPath("$[0].startTime").value("2024-06-04T00:00:00"),
+            jsonPath("$[0].endTime").value("2024-06-04T01:00:00"),
+        )
     }
 
     @DisplayName("예약 삭제 - 성공")
     @Test
-    @Throws(Exception::class)
     fun deleteSuccessTest() {
         mockMvc.perform(
-            MockMvcRequestBuilders.delete("/admin/reservation")
+            delete("/admin/reservation")
                 .param("id", "1")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
-        )
-            .andExpectAll(status().isOk())
+        ).andExpectAll(status().isOk())
     }
 
     @DisplayName("예약 삭제 - null")
     @Test
-    @Throws(Exception::class)
     fun deleteNullTest() {
         mockMvc.perform(
-            MockMvcRequestBuilders.delete("/admin/reservation")
+            delete("/admin/reservation")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
+        ).andExpectAll(
+            status().isBadRequest(),
+            jsonPath("$").value("값이 null 입니다."),
         )
-            .andExpectAll(
-                status().isBadRequest(),
-                jsonPath("$").value("값이 null 입니다."),
-            )
     }
 
     @DisplayName("예약 삭제 - 없는 인덱스")
@@ -88,14 +101,13 @@ class AdminControllerTest {
     @Throws(java.lang.Exception::class)
     fun deleteWrongIndexTest() {
         mockMvc.perform(
-            MockMvcRequestBuilders.delete("/admin/reservation")
+            delete("/admin/reservation")
                 .param("id", "9999")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
+        ).andExpectAll(
+            status().isBadRequest(),
+            jsonPath("$").value("예약을 찾을 수 없습니다."),
         )
-            .andExpectAll(
-                status().isBadRequest(),
-                jsonPath("$").value("예약을 찾을 수 없습니다."),
-            )
     }
 
     @DisplayName("예약 삭제 - 빈칸")
@@ -103,14 +115,13 @@ class AdminControllerTest {
     @Throws(java.lang.Exception::class)
     fun deleteBlankTest() {
         mockMvc.perform(
-            MockMvcRequestBuilders.delete("/admin/reservation")
+            delete("/admin/reservation")
                 .param("id", "")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
+        ).andExpectAll(
+            status().isBadRequest(),
+            jsonPath("$").value("값이 null 입니다."),
         )
-            .andExpectAll(
-                status().isBadRequest(),
-                jsonPath("$").value("값이 null 입니다."),
-            )
     }
 
     @DisplayName("예약 삭제 - 마이너스 인덱스")
@@ -118,14 +129,13 @@ class AdminControllerTest {
     @Throws(java.lang.Exception::class)
     fun deleteMinusTest() {
         mockMvc.perform(
-            MockMvcRequestBuilders.delete("/admin/reservation")
+            delete("/admin/reservation")
                 .param("id", "-1")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
+        ).andExpectAll(
+            status().isBadRequest(),
+            jsonPath("$").value("값이 음수입니다."),
         )
-            .andExpectAll(
-                status().isBadRequest(),
-                jsonPath("$").value("값이 음수입니다."),
-            )
     }
 
     @DisplayName("예약 삭제 - 특수 문자")
@@ -133,13 +143,12 @@ class AdminControllerTest {
     @Throws(java.lang.Exception::class)
     fun deleteSpecialCharacterTest() {
         mockMvc.perform(
-            MockMvcRequestBuilders.delete("/admin/reservation")
+            delete("/admin/reservation")
                 .param("id", "*")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
+        ).andExpectAll(
+            status().isBadRequest(),
+            jsonPath("$").value("타입이 잘못되었습니다."),
         )
-            .andExpectAll(
-                status().isBadRequest(),
-                jsonPath("$").value("타입이 잘못되었습니다."),
-            )
     }
 }

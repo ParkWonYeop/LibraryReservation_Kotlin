@@ -12,7 +12,7 @@ import jakarta.persistence.ManyToOne
 class TokenEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val tokenId: Long? = null,
+    val id: Long? = null,
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

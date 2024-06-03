@@ -11,7 +11,7 @@ import jakarta.persistence.Id
 class RoomEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val roomId: Long? = null,
+    val id: Long? = null,
 
     @Column(name = "room_type", nullable = false)
     var roomType: RoomEnum,

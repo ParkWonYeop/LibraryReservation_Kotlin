@@ -2,7 +2,9 @@ package com.example.libraryReservationKotlin.reservation
 
 import com.example.libraryReservationKotlin.common.dto.ReservationDeleteDto
 import com.example.libraryReservationKotlin.common.dto.ReservationDto
+import com.example.libraryReservationKotlin.common.pageable.CustomPageRequest
 import com.example.libraryReservationKotlin.common.validation.ValidationSequence
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -23,7 +25,7 @@ class ReservationController(private val reservationService: ReservationService) 
     ) = reservationService.reservationSeat(reservationDto)
 
     @GetMapping
-    fun getReservationList() = reservationService.getReservationList()
+    fun getReservationList(@PageableDefault pageRequest: CustomPageRequest) = reservationService.getReservationList(pageRequest)
 
     @DeleteMapping()
     fun deleteReservation(

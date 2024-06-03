@@ -16,7 +16,7 @@ import java.time.LocalDateTime
 class UserEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val userId: Long? = null,
+    val id: Long? = null,
 
     @Column(name = "phone_number", nullable = false)
     var phoneNumber: String,

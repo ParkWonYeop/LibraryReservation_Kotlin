@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 class ReservationEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val reservationId: Long? = null,
+    val id: Long? = null,
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

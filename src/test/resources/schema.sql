@@ -1,12 +1,4 @@
-drop table if exists reservation cascade;
-
-drop table if exists room cascade;
-
-drop table if exists user_token cascade;
-
-drop table if exists users cascade;
-
-create table reservation
+create table if not exists reservation
 (
     reservation_id bigint auto_increment,
     user_id        bigint       not null,
@@ -16,7 +8,7 @@ create table reservation
     primary key (reservation_id)
 );
 
-create table room
+create table if not exists room
 (
     room_id     bigint auto_increment,
     room_type   tinyint not null check (room_type between 0 and 2),
@@ -24,7 +16,7 @@ create table room
     primary key (room_id)
 );
 
-create table user_token
+create table if not exists user_token
 (
     token_id      bigint auto_increment,
     user_id       bigint not null,
@@ -33,7 +25,7 @@ create table user_token
     primary key (token_id)
 );
 
-create table users
+create table if not exists users
 (
     user_id      bigint auto_increment,
     name         varchar(255) not null,
@@ -44,6 +36,11 @@ create table users
     update_at    timestamp(6),
     primary key (user_id)
 );
+
+truncate table reservation restart identity;
+truncate table room restart identity;
+truncate table users restart identity;
+truncate table user_token restart identity;
 
 alter table if exists reservation
     add constraint FK26j1jgrx8n5n1xbc04y22tm6d
