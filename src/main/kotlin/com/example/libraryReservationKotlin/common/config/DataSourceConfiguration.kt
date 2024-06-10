@@ -14,24 +14,20 @@ import javax.sql.DataSource
 @Profile("!test")
 @Configuration
 class DataSourceConfiguration(private val dataBaseProperty: DataBaseProperty) {
-    @Bean
-    fun writerDataSource(): HikariDataSource {
-        val hikariDataSource = HikariDataSource()
-        hikariDataSource.driverClassName = dataBaseProperty.driverClassName
-        hikariDataSource.jdbcUrl = dataBaseProperty.writerUrl
-        hikariDataSource.username = dataBaseProperty.writerUsername
-        hikariDataSource.password = dataBaseProperty.writerPassword
-        return hikariDataSource
+    @Bean("writerDataSource")
+    fun writerDataSource(): HikariDataSource = HikariDataSource().apply {
+        driverClassName = dataBaseProperty.driverClassName
+        jdbcUrl = dataBaseProperty.writerUrl
+        username = dataBaseProperty.writerUsername
+        password = dataBaseProperty.writerPassword
     }
 
-    @Bean
-    fun readerDataSource(): HikariDataSource {
-        val hikariDataSource = HikariDataSource()
-        hikariDataSource.driverClassName = dataBaseProperty.driverClassName
-        hikariDataSource.jdbcUrl = dataBaseProperty.readerUrl
-        hikariDataSource.username = dataBaseProperty.readerUsername
-        hikariDataSource.password = dataBaseProperty.readerPassword
-        return hikariDataSource
+    @Bean("readerDataSource")
+    fun readerDataSource(): HikariDataSource = HikariDataSource().apply {
+        driverClassName = dataBaseProperty.driverClassName
+        jdbcUrl = dataBaseProperty.readerUrl
+        username = dataBaseProperty.readerUsername
+        password = dataBaseProperty.readerPassword
     }
 
     @Bean

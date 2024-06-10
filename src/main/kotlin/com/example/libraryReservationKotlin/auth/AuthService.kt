@@ -31,7 +31,9 @@ class AuthService(
     private val log = LoggerFactory.getLogger(AuthService::class.java)
 
     @Transactional
-    fun login(loginDto: LoginDto): LoginResponseDto {
+    fun login(
+        loginDto: LoginDto,
+    ): LoginResponseDto {
         val userEntity = userRepository.findByPhoneNumber(loginDto.phoneNumber)
             ?: throw AccessDeniedException("전화번호가 일치하지 않습니다.")
 
@@ -42,12 +44,11 @@ class AuthService(
         val accessToken = jwtUtil.generateToken(userEntity, secretKey)
         val refreshToken = jwtUtil.createRefreshToken(secretKey)
 
-        val tokenEntity = tokenRepository.findByUser(userEntity)
-            ?: TokenEntity(null, userEntity, accessToken, refreshToken)
-
-        tokenEntity.user = userEntity
-        tokenEntity.refreshToken = refreshToken
-        tokenEntity.accessToken = accessToken
+        val tokenEntity = tokenRepository.findByUser(userEntity)?.apply {
+            this.accessToken = accessToken
+            this.refreshToken = refreshToken
+        }
+            ?: TokenEntity(userEntity, accessToken, refreshToken)
 
         tokenRepository.save(tokenEntity)
 
@@ -57,21 +58,26 @@ class AuthService(
     }
 
     @Transactional
-    fun signup(signupDto: SignupDto) {
+    fun signup(
+        signupDto: SignupDto,
+    ) {
         val phoneNumber = signupDto.phoneNumber
-        if (userRepository.findByPhoneNumber(phoneNumber) != null) {
+
+        userRepository.findByPhoneNumber(phoneNumber)?.let {
             throw CustomException(CommunalResponse.ALREADY_SIGNUP_PHONENUMBER)
         }
 
         val passwordEncode = encoder.encode(signupDto.password)
 
-        val userEntity = UserEntity(null, phoneNumber, passwordEncode, signupDto.name)
+        val userEntity = UserEntity(phoneNumber, passwordEncode, signupDto.name)
 
         userRepository.save(userEntity)
     }
 
     @Transactional
-    fun refreshToken(refreshDto: RefreshDto): RefreshResponseDto {
+    fun refreshToken(
+        refreshDto: RefreshDto,
+    ): RefreshResponseDto {
         if (jwtUtil.isExpired(refreshDto.refreshToken, secretKey)) {
             throw AccessDeniedException("refreshToken is expired")
         }
@@ -91,8 +97,10 @@ class AuthService(
         val accessToken = jwtUtil.generateToken(userEntity, secretKey)
         val refreshToken = jwtUtil.createRefreshToken(secretKey)
 
-        tokenEntity.accessToken = accessToken
-        tokenEntity.refreshToken = refreshToken
+        tokenEntity.apply {
+            this.accessToken = accessToken
+            this.refreshToken = refreshToken
+        }
 
         tokenRepository.save(tokenEntity)
 

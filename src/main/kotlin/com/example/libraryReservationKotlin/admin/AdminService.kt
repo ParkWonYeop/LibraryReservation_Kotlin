@@ -14,11 +14,15 @@ class AdminService(
     private val reservationRepository: ReservationRepository,
 ) {
     @Transactional(readOnly = true)
-    fun getReservationList(pageRequest: CustomPageRequest): List<ReservationEntity> = reservationRepository.findAll(pageRequest).content
+    fun getReservationList(
+        pageRequest: CustomPageRequest,
+    ): List<ReservationEntity> = reservationRepository.findAll(pageRequest).content
 
     @Transactional
-    fun deleteReservation(reservationDeleteDto: ReservationDeleteDto) {
-        val id = reservationDeleteDto.getNotNullId()
+    fun deleteReservation(
+        reservationDeleteDto: ReservationDeleteDto,
+    ) {
+        val id = reservationDeleteDto.id
         val reservationEntity = reservationRepository.findReservationById(id)
             ?: throw CustomException(CommunalResponse.RESERVATION_NOT_FOUND)
 

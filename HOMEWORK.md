@@ -42,3 +42,13 @@
 - drop table, truncate 차이를 성능에 근거하여 포스팅 *
 - 매 테스트 코드가 돌 때 마다 sql 돌 때 auto_increment 초기화하는 방법 강구해보기. *
 - 코드 통일성 지킬것. 꼼꼼함을 기를것.
+
+#### 2024-06-03
+- jpa.hibernate.ddl-auto 옵션들 스터디 후 포스팅 *
+- NotBlank 어노테이션을 걸었는데, 기본값으로 ""(empty) 세팅하는 로직 리팩토링할것. *
+- BaseEntity 를 만들고, 모든 entity들이 BaseEntity를 상속받게끔 수정 *
+    - BaseEntity 는 createdAt, updatedAt, deletedAt 을 넣기.
+- soft delete / hard delete 스터디 후 포스팅 *
+- RuntimeExceptionHandler 리팩토링 *
+- 프로젝트 전수 검사 후 리팩토링 이어서 진행할것. *
+- JWTUtil 예외처리 로직쪽 반드시 리팩토링할것. *

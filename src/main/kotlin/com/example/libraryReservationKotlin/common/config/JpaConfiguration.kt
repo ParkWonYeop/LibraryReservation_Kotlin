@@ -24,38 +24,30 @@ class JpaConfiguration(
     @Bean
     fun entityManagerFactory(
         @Qualifier("dataSource") dataSource: DataSource,
-    ): LocalContainerEntityManagerFactoryBean {
-        val entityManagerFactoryBean = LocalContainerEntityManagerFactoryBean()
-        entityManagerFactoryBean.dataSource = dataSource
-        entityManagerFactoryBean.setPackagesToScan("com.example.libraryReservationKotlin")
-        entityManagerFactoryBean.jpaVendorAdapter = jpaVendorAdapter()
-        entityManagerFactoryBean.persistenceUnitName = "entityManager"
-        entityManagerFactoryBean.setJpaProperties(hibernateProperties())
-        return entityManagerFactoryBean
+    ): LocalContainerEntityManagerFactoryBean = LocalContainerEntityManagerFactoryBean().apply {
+        this.dataSource = dataSource
+        setPackagesToScan("com.example.libraryReservationKotlin")
+        jpaVendorAdapter = jpaVendorAdapter()
+        persistenceUnitName = "entityManager"
+        setJpaProperties(hibernateProperties())
     }
 
-    private fun jpaVendorAdapter(): JpaVendorAdapter {
-        val hibernateJpaVendorAdapter = HibernateJpaVendorAdapter()
-        hibernateJpaVendorAdapter.setShowSql(false)
-        hibernateJpaVendorAdapter.setDatabase(Database.MYSQL)
-        hibernateJpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.MySQLDialect")
-        return hibernateJpaVendorAdapter
+    private fun jpaVendorAdapter(): JpaVendorAdapter = HibernateJpaVendorAdapter().apply {
+        setShowSql(false)
+        setDatabase(Database.MYSQL)
+        setDatabasePlatform("org.hibernate.dialect.MySQLDialect")
     }
 
-    private fun hibernateProperties(): Properties {
-        val properties = Properties()
-        properties.setProperty("hibernate.hbm2ddl.auto", auto)
-        properties.setProperty("hibernate.format_sql", "true")
-        return properties
+    private fun hibernateProperties(): Properties = Properties().apply {
+        setProperty("hibernate.hbm2ddl.auto", auto)
+        setProperty("hibernate.format_sql", "true")
     }
 
     @Bean
     fun transactionManager(
         @Qualifier("entityManagerFactory")
         entityManagerFactory: LocalContainerEntityManagerFactoryBean,
-    ): JpaTransactionManager {
-        val jpaTransactionManager = JpaTransactionManager()
-        jpaTransactionManager.entityManagerFactory = entityManagerFactory.`object`
-        return jpaTransactionManager
+    ): JpaTransactionManager = JpaTransactionManager().apply {
+        this.entityManagerFactory = entityManagerFactory.`object`
     }
 }

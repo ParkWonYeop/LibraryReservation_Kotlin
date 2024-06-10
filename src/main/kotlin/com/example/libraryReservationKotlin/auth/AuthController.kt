@@ -18,17 +18,23 @@ import org.springframework.web.bind.annotation.RestController
 class AuthController(private val authService: AuthService) {
     @PostMapping("/login")
     fun login(
-        @Validated(ValidationSequence::class) @RequestBody loginDto: LoginDto,
+        @Validated(ValidationSequence::class)
+        @RequestBody
+        loginDto: LoginDto,
     ) = authService.login(loginDto)
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     fun signup(
-        @Validated(ValidationSequence::class) @RequestBody signupDto: SignupDto,
+        @Validated(ValidationSequence::class)
+        @RequestBody
+        signupDto: SignupDto,
     ) = authService.signup(signupDto)
 
     @PutMapping("/token")
     fun refreshToken(
-        @Validated(ValidationSequence::class) @RequestBody refreshDto: RefreshDto,
+        @Validated(ValidationSequence::class)
+        @RequestBody
+        refreshDto: RefreshDto,
     ) = authService.refreshToken(refreshDto)
 }

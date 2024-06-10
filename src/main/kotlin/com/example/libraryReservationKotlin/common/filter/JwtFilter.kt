@@ -19,11 +19,15 @@ class JwtFilter(private val userRepository: UserRepository, private val tokenRep
     private val log = LoggerFactory.getLogger(JwtFilter::class.java)
     private val jwtUtil = JwtUtil()
 
-    override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
+    override fun doFilterInternal(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain,
+    ) {
         if (!request.requestURI.contains("/auth")) {
             val authorization = request.getHeader(HttpHeaders.AUTHORIZATION)
 
-            if (authorization == null || !authorization.startsWith("Bearer ")) {
+            if (authorization.isNullOrBlank() || !authorization.startsWith("Bearer ")) {
                 log.error("authorization 이 없습니다.")
                 filterChain.doFilter(request, response)
                 return
@@ -39,7 +43,7 @@ class JwtFilter(private val userRepository: UserRepository, private val tokenRep
 
             val phoneNumber = jwtUtil.getSubject(token, secretKey)
 
-            if (phoneNumber == "") {
+            if (phoneNumber.isBlank()) {
                 log.error("토큰에 Subject가 없습니다.")
                 filterChain.doFilter(request, response)
                 return
@@ -54,10 +58,12 @@ class JwtFilter(private val userRepository: UserRepository, private val tokenRep
 
             val checkToken = tokenRepository.findByUser(user)
 
-            if (checkToken != null && checkToken.accessToken != token) {
-                log.error("토큰이 유효하지 않습니다.")
-                filterChain.doFilter(request, response)
-                return
+            checkToken?.let {
+                if (it.accessToken != token) {
+                    log.error("토큰이 유효하지 않습니다.")
+                    filterChain.doFilter(request, response)
+                    return
+                }
             }
 
             MDC.put("phoneNumber", token)

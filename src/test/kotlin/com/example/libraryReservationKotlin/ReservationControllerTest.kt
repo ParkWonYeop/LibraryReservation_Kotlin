@@ -19,7 +19,6 @@ import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
@@ -88,7 +87,7 @@ class ReservationControllerTest {
             .andExpectAll(
                 status().isBadRequest(),
                 jsonPath("$").value("타입이 잘못되었습니다."),
-            ).andDo(MockMvcResultHandlers.print())
+            )
     }
 
     @DisplayName("예약 테스트 - seatNumber/특수문자")
@@ -117,7 +116,22 @@ class ReservationControllerTest {
         )
             .andExpectAll(
                 status().isBadRequest(),
-                jsonPath("$").value("값이 null 입니다."),
+                jsonPath("$").value("잘못된 좌석 번호 입니다."),
+            )
+    }
+
+    @DisplayName("예약 테스트 - seatNumber/Null")
+    @Test
+    fun addSeatNullTest() {
+        mockMvc.perform(
+            post("/reservation")
+                .content(objectMapper.writeValueAsString(reservationFixtures.createReservationNullSeatNumber()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
+        )
+            .andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$").value("잘못된 좌석 번호 입니다."),
             )
     }
 
@@ -144,7 +158,7 @@ class ReservationControllerTest {
         mockMvc.perform(
             delete("/reservation")
                 .param("id", "1")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken2")),
         )
             .andExpectAll(status().isOk())
     }
@@ -187,7 +201,7 @@ class ReservationControllerTest {
         )
             .andExpectAll(
                 status().isBadRequest(),
-                jsonPath("$").value("값이 null 입니다."),
+                jsonPath("$").value("타입이 잘못되었습니다."),
             )
     }
 
@@ -197,7 +211,7 @@ class ReservationControllerTest {
         mockMvc.perform(
             delete("/reservation")
                 .param("id", 1.toString())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken2")),
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
         )
             .andExpectAll(
                 status().isBadRequest(),

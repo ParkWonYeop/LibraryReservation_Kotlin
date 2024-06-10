@@ -92,7 +92,7 @@ class AdminControllerTest {
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
         ).andExpectAll(
             status().isBadRequest(),
-            jsonPath("$").value("값이 null 입니다."),
+            jsonPath("$").value("타입이 잘못되었습니다."),
         )
     }
 
@@ -120,7 +120,7 @@ class AdminControllerTest {
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + session.getAttribute("accessToken")),
         ).andExpectAll(
             status().isBadRequest(),
-            jsonPath("$").value("값이 null 입니다."),
+            jsonPath("$").value("타입이 잘못되었습니다."),
         )
     }
 

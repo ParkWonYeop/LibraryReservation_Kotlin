@@ -1,5 +1,6 @@
 package com.example.libraryReservationKotlin.common.entity
 
+import com.example.libraryReservationKotlin.common.entity.baseEntity.baseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -28,4 +29,17 @@ class ReservationEntity(
 
     @Column(name = "end_time", nullable = false)
     var endTime: LocalDateTime? = null,
-)
+) : baseEntity() {
+    constructor(
+        user: UserEntity,
+        room: RoomEntity,
+        startTime: LocalDateTime,
+        endTime: LocalDateTime?,
+    ) : this(
+        id = null,
+        user = user,
+        room = room,
+        startTime = startTime,
+        endTime = endTime,
+    )
+}

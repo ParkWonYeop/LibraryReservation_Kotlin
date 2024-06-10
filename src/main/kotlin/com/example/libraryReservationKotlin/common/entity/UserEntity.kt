@@ -1,5 +1,6 @@
 package com.example.libraryReservationKotlin.common.entity
 
+import com.example.libraryReservationKotlin.common.entity.baseEntity.baseEntity
 import com.example.libraryReservationKotlin.common.enum.PermissionEnum
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -8,9 +9,6 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import org.hibernate.annotations.CreationTimestamp
-import org.hibernate.annotations.UpdateTimestamp
-import java.time.LocalDateTime
 
 @Entity(name = "users")
 class UserEntity(
@@ -30,10 +28,15 @@ class UserEntity(
     @Column(name = "permission", nullable = false)
     @Enumerated(EnumType.STRING)
     var permission: PermissionEnum = PermissionEnum.USER,
-
-    @CreationTimestamp
-    var createAt: LocalDateTime = LocalDateTime.now(),
-
-    @UpdateTimestamp
-    var updateAt: LocalDateTime = LocalDateTime.now(),
-)
+) : baseEntity() {
+    constructor(
+        phoneNumber: String,
+        password: String,
+        name: String,
+    ) : this(
+        id = null,
+        phoneNumber = phoneNumber,
+        password = password,
+        name = name,
+    )
+}

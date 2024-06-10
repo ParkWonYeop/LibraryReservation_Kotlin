@@ -10,12 +10,21 @@ import java.util.*
 class LoggingInterceptor : HandlerInterceptor {
     private val log = LoggerFactory.getLogger(LoggingInterceptor::class.java)
 
-    override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+    override fun preHandle(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any,
+    ): Boolean {
         requestLogging(request)
         return true
     }
 
-    override fun afterCompletion(request: HttpServletRequest, response: HttpServletResponse, handler: Any, ex: Exception?) {
+    override fun afterCompletion(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any,
+        ex: Exception?,
+    ) {
         log.info(
             "Response. Method: {}, URI: {}, Status: {}",
             request.method,
