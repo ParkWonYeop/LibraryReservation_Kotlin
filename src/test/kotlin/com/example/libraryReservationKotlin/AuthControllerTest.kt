@@ -45,7 +45,7 @@ class AuthControllerTest {
                 status().isOk(),
                 jsonPath("$.accessToken").isString(),
                 jsonPath("$.refreshToken").isString(),
-            ).andDo(MockMvcResultHandlers.print())
+            )
     }
 
     @DisplayName("로그인 - 빈 전화번호")
