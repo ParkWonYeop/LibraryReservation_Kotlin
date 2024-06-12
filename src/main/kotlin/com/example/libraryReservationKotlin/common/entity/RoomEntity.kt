@@ -1,6 +1,6 @@
 package com.example.libraryReservationKotlin.common.entity
 
-import com.example.libraryReservationKotlin.common.entity.baseEntity.baseEntity
+import com.example.libraryReservationKotlin.common.entity.baseEntity.BaseEntity
 import com.example.libraryReservationKotlin.common.enum.RoomEnum
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -19,4 +19,4 @@ class RoomEntity(
 
     @Column(name = "seat_number", nullable = false)
     var seatNumber: Int,
-) : baseEntity()
+) : BaseEntity()

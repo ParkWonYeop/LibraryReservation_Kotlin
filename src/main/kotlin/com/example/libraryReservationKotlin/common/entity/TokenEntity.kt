@@ -1,6 +1,6 @@
 package com.example.libraryReservationKotlin.common.entity
 
-import com.example.libraryReservationKotlin.common.entity.baseEntity.baseEntity
+import com.example.libraryReservationKotlin.common.entity.baseEntity.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -24,7 +24,7 @@ class TokenEntity(
 
     @Column(name = "refresh_token")
     var refreshToken: String,
-) : baseEntity() {
+) : BaseEntity() {
     constructor(
         user: UserEntity,
         accessToken: String,

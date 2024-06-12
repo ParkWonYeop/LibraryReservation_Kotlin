@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 
 @EntityListeners(AuditingEntityListener::class)
 @MappedSuperclass
-class baseEntity(
+class BaseEntity(
     @CreationTimestamp
     @Column(updatable = false)
     val createAt: LocalDateTime = LocalDateTime.now(),

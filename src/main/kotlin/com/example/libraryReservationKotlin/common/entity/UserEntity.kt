@@ -1,6 +1,6 @@
 package com.example.libraryReservationKotlin.common.entity
 
-import com.example.libraryReservationKotlin.common.entity.baseEntity.baseEntity
+import com.example.libraryReservationKotlin.common.entity.baseEntity.BaseEntity
 import com.example.libraryReservationKotlin.common.enum.PermissionEnum
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -28,7 +28,7 @@ class UserEntity(
     @Column(name = "permission", nullable = false)
     @Enumerated(EnumType.STRING)
     var permission: PermissionEnum = PermissionEnum.USER,
-) : baseEntity() {
+) : BaseEntity() {
     constructor(
         phoneNumber: String,
         password: String,
