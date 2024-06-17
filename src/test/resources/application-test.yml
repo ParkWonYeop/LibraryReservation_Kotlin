@@ -7,9 +7,17 @@ secret_key: "TestCompleteDriverAccessHousePartyRidingCakeGenerationAwakePowerSup
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:reservation
-    username: sa
-    password:
+    writer:
+      hikari:
+        url: jdbc:h2:mem:reservation
+        username: sa
+        password:
+    reader:
+      hikari:
+        url: jdbc:h2:mem:reservation
+        username: sa
+        password:
+    database-name: "h2"
   h2:
     console:
       enabled: true

@@ -80,5 +80,5 @@ VALUES ('eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIwMTA5OTcxNjczNyIsImlhdCI6MTcxNjcxOTI1Ni
 
 
 INSERT INTO reservation
-    (room_id, user_id, start_time, end_time)
+    (user_id, room_id, start_time, end_time)
 VALUES (1, 1, '2024-06-04 00:00:00', '2024-06-04 01:00:00');

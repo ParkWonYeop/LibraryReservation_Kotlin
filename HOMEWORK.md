@@ -52,3 +52,10 @@
 - RuntimeExceptionHandler 리팩토링 *
 - 프로젝트 전수 검사 후 리팩토링 이어서 진행할것. *
 - JWTUtil 예외처리 로직쪽 반드시 리팩토링할것. *
+
+#### 2024-06-10
+- @PreUpdate 공부해보기. *
+- baseEntity.kt 네이밍 수정할것. *
+- main에 jpa 관련 어노테이션 붙여놓은거 제거할것. *
+- 다음 프로젝트 난이도 높아 보이는것 고민해보기.
+    - spring boot + kotlin + gradle + jpa(query DSL)

@@ -1,10 +1,8 @@
 package com.example.libraryReservationKotlin.common.routingDataSource
 
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 
-@Profile("!test")
 @Component
 class DataBaseProperty(
     @Value("\${spring.datasource.writer.hikari.url}")

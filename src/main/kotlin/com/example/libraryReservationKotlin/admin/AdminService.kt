@@ -26,6 +26,6 @@ class AdminService(
         val reservationEntity = reservationRepository.findReservationById(id)
             ?: throw CustomException(CommunalResponse.RESERVATION_NOT_FOUND)
 
-        return reservationRepository.delete(reservationEntity)
+        reservationRepository.save(reservationEntity.also { it.softDelete() })
     }
 }

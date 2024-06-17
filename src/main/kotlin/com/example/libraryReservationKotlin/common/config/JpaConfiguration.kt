@@ -2,9 +2,10 @@ package com.example.libraryReservationKotlin.common.config
 
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.orm.jpa.JpaTransactionManager
 import org.springframework.orm.jpa.JpaVendorAdapter
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
@@ -14,12 +15,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 import java.util.*
 import javax.sql.DataSource
 
+@EnableJpaRepositories(basePackages = ["com.example.libraryReservationKotlin"])
+@EntityScan(basePackages = ["com.example.libraryReservationKotlin"])
 @Configuration
 @EnableTransactionManagement
-@Profile("!test")
 class JpaConfiguration(
     @Value("\${spring.jpa.hibernate.ddl-auto}")
     private val auto: String,
+    @Value("\${spring.datasource.database-name}")
+    private val databaseName: String,
 ) {
     @Bean
     fun entityManagerFactory(
@@ -32,10 +36,16 @@ class JpaConfiguration(
         setJpaProperties(hibernateProperties())
     }
 
-    private fun jpaVendorAdapter(): JpaVendorAdapter = HibernateJpaVendorAdapter().apply {
-        setShowSql(false)
-        setDatabase(Database.MYSQL)
-        setDatabasePlatform("org.hibernate.dialect.MySQLDialect")
+    private fun jpaVendorAdapter(): JpaVendorAdapter = HibernateJpaVendorAdapter().also {
+        if (databaseName == "mysql") {
+            it.setShowSql(false)
+            it.setDatabase(Database.MYSQL)
+            it.setDatabasePlatform("org.hibernate.dialect.MySQLDialect")
+        } else if (databaseName == "h2") {
+            it.setShowSql(true)
+            it.setDatabase(Database.H2)
+            it.setDatabasePlatform("org.hibernate.dialect.H2Dialect")
+        }
     }
 
     private fun hibernateProperties(): Properties = Properties().apply {

@@ -1,6 +1,6 @@
 package com.example.libraryReservationKotlin.common.entity
 
-import com.example.libraryReservationKotlin.common.entity.baseEntity.BaseEntity
+import com.example.libraryReservationKotlin.common.baseEntity.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -8,7 +8,9 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import org.hibernate.annotations.SQLRestriction
 
+@SQLRestriction("deleted_at IS NOT NULL")
 @Entity(name = "user_token")
 class TokenEntity(
     @Id

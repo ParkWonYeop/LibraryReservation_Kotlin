@@ -81,7 +81,7 @@ class ReservationService(
             throw CustomException(CommunalResponse.USER_NOT_CORRECT)
         }
 
-        reservationRepository.delete(reservationEntity)
+        reservationRepository.save(reservationEntity.also { it.softDelete() })
     }
 
     private fun findSeatNumber(
